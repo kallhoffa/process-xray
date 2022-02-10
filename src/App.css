@@ -1,21 +1,18 @@
+html, body, #root, .App{
+  height: 100%;
+}
+
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  display: grid;
+  grid-template-rows: 50px auto;
+  width: 100%;
+  height: 100%;
 }
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,15 +21,27 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.App-content {
+  grid-row: 2;
+  height: auto;
+  display:flex;
+  width: 100%;
+  background-color: #7186b8;
+
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ReactFlowWrapper {
+  height: auto;
+  width: 100%;
+  background-color: #7186b8;
+
 }
+/* .MuiPopover-root{
+
+  border: 4px solid black;
+}
+
+.MuiPopover-paper{
+  margin-top: 10px;
+  border: 4px solid black;
+} */
