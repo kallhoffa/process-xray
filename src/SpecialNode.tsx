@@ -2,14 +2,11 @@ import React, { memo , FC, useState} from 'react';
 
 import './SpecialNode.css'
 
-import Button from '@material-ui/core/Button';
-
 import { Handle, Position, NodeProps } from 'react-flow-renderer';
-
+import { Box, Input, Button,  TextField } from '@mui/material';
 // const handleNodeClick = (event: any) => {
 //   console.log("click")
 // };
-
 
 
 
@@ -20,10 +17,29 @@ const SpecialNode : FC<NodeProps> = ({ data, isConnectable}: any) => {
     setExpanded(!expanded)
   }
 
-  var expandedTest = ""
+  var expandedTest = <></>
 
   if( expanded){
-    expandedTest = "hey"
+    expandedTest =  <Box
+      component="form"
+      sx={{
+        '& .MuiTextField-root': { marginTop: 2 },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <div>
+        <TextField
+          id="outlined-multiline-flexible"
+          label="Description"
+          sx={{
+            '& .MuiInputLabel-root': {fontSize: '10px'},
+            '& .MuiInputBase-root': {fontSize: '10px'},
+          }}
+          multiline
+        />
+        </div>
+  </Box>
   }
 
   return (
@@ -36,18 +52,30 @@ const SpecialNode : FC<NodeProps> = ({ data, isConnectable}: any) => {
         isConnectable={isConnectable}
       />
       <div>
-        New Node 
+        <Input 
+          defaultValue="New Node" 
+          disableUnderline={true}
+          sx = {{
+            fontSize: 12,
+          }}/>
       </div>
       <Button
-          variant="contained"
-          color="primary"
-          onClick={handleExpandClick}
+        variant="contained"
+        color="primary"
+        onClick={handleExpandClick}
+        sx = {{
+          fontSize: 8,
+          padding: 0,
+        }}
         >
           Expand
         </Button>
-        <div>
+        <Box 
+          sx={{
+            fontSize: '6px',
+          }}>
         {expandedTest}
-        </div>
+        </Box>
       <Handle
         type="source"
         position={Position.Right}

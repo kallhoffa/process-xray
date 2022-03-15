@@ -12,6 +12,7 @@
   .react-flow__node-special {
     background: #fff;
     border-color: #1a192b;
+    padding-top: 5px;
   }
 
   .react-flow__node-special.react-flow__handle {
@@ -26,3 +27,4 @@
   .react-flow__node-special.selected:hover {
     box-shadow: 0 0 0 0.5px #1a192b;
   }
+
