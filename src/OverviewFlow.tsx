@@ -46,13 +46,27 @@ const OverviewFlow = () => {
   // POPOVER Code---------------------------
 
   const [elements, setElements]: any = useState(initialElements);
-  const [lastElementId, setLastElementId]: any = useState(7);
+  const elementRef: any = useRef(elements)
+  const lastElementId: any = useRef(7);
+
+  const updateElements = (newElements: any): any =>{
+    setElements(newElements);
+    elementRef.current = newElements;
+  }
 
   const onElementsRemove = (elementsToRemove: any) =>
     setElements((els: any) => removeElements(elementsToRemove, els));
 
   const onConnect = (params: any) => setElements((els: any) => addEdge(params, els));
 
+
+  const elementsObject = {
+    updateElements,
+    elementRef,
+    lastElementId,
+    reactFlowInstance,
+    reactFlowWrapper,
+  }
   
 
   return (
@@ -87,9 +101,7 @@ const OverviewFlow = () => {
       />
       <Controls />
       <Background color="#aaa" gap={16} />
-      <CanvasClickPopover handleClose={handleCanvasPopoverClose} anchorEl={anchorEl} setElements={setElements} 
-                          elements={elements} lastElementId={lastElementId} setLastElementId={setLastElementId}
-                          reactFlowInstance={reactFlowInstance} reactFlowWrapper={reactFlowWrapper}/>
+      <CanvasClickPopover handleClose={handleCanvasPopoverClose} anchorEl={anchorEl} elementsObject={elementsObject}/>
       
     </ReactFlow>
     </div>

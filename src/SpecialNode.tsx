@@ -8,14 +8,42 @@ import { Box, Input, Button,  TextField } from '@mui/material';
 //   console.log("click")
 // };
 
+import CreateNode from './CreateNode'
+import CreateEdge from './CreateEdge'
 
-
-const SpecialNode : FC<NodeProps> = ({ data, isConnectable}: any) => {
+const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any) => {
   const [expanded, setExpanded]: any = useState(false);
+
+  const elementsObject = data.elementsObject;
+
 
   const handleExpandClick = (event: any) => {
     setExpanded(!expanded)
   }
+
+  const handleNewOutputClick = (event: any) => {
+
+    const nodeX = xPos + 200;
+    const nodeY = yPos;
+
+    console.log(xPos, yPos)
+
+    const newNodeId: string = CreateNode({nodeX, nodeY, inPixels:false, elementsObject})
+    CreateEdge({source: id, target: newNodeId, elementsObject})
+  }
+
+  const handleNewInputClick = (event: any) => {
+
+    const nodeX = xPos - 200;
+    const nodeY = yPos;
+
+    console.log(xPos, yPos)
+
+    const newNodeId: string = CreateNode({nodeX, nodeY, inPixels:false, elementsObject})
+    CreateEdge({source: newNodeId, target: id, elementsObject})
+  }
+
+
 
   var expandedTest = <></>
 
@@ -52,6 +80,21 @@ const SpecialNode : FC<NodeProps> = ({ data, isConnectable}: any) => {
         isConnectable={isConnectable}
       />
       <div>
+        <Button 
+          onClick={handleNewInputClick}
+          variant="contained"
+          sx={{
+            backgroundColor: '#555',
+          }}
+        />
+        <Button 
+          onClick={handleNewOutputClick}
+          variant="contained"
+          sx={{
+            backgroundColor: '#555',
+          }}
+        />
+        
         <Input 
           defaultValue="New Node" 
           disableUnderline={true}

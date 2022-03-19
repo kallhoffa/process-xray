@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        SystemXray
+        ProcessXray
       </header>
       <div className="App-content">
         <OverviewFlow />

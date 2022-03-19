@@ -1,7 +1,7 @@
 import React from 'react';
 
 const initial = [
-    {
+    /*{
     id: '1',
     type: 'input',
     data: {
@@ -105,7 +105,8 @@ const initial = [
     label: 'a step edge',
     animated: true,
     labelStyle: { fill: '#f6ab6c', fontWeight: 700 },
-  },
+  },*/
+  {}
 ];
 
 export default initial

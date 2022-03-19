@@ -1,11 +1,13 @@
 import React from 'react';
 
+import CreateNode from './CreateNode'
+
 import { makeStyles } from '@material-ui/core/styles';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-const CanvasClickPopover = ({anchorEl, handleClose, setElements, elements, lastElementId, setLastElementId,reactFlowWrapper,reactFlowInstance}: any) => {
+const CanvasClickPopover = ({anchorEl, handleClose, elementsObject}: any) => {
 
 
   // POPOVER TESTING---------------------------
@@ -31,24 +33,12 @@ const CanvasClickPopover = ({anchorEl, handleClose, setElements, elements, lastE
 
   const handlePopoverClick = (event: any) => {
     
-    const id = lastElementId + 1
+    const reactFlowBounds = elementsObject.reactFlowWrapper.current.getBoundingClientRect();
+    const nodeX = anchorEl.x - reactFlowBounds.left - 150
+    const nodeY = anchorEl.y - reactFlowBounds.top-25
 
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const position = reactFlowInstance.project({
-        x: anchorEl.x - reactFlowBounds.left - 150,
-        y: anchorEl.y - reactFlowBounds.top-25,
-      });
-  
-    const newNode = {
-      id: id.toString(),
-      type: 'special',
-      data: { label: `Node ${id}` },
-      position,
-    }
+    CreateNode({nodeX, nodeY, inPixels: true,  elementsObject})
 
-    setElements(elements.concat(newNode));
-    console.log(elements, id)
-    setLastElementId(id)
     handleClose()
   }
 
