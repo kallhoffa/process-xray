@@ -3,7 +3,12 @@ import React, { memo , FC, useState} from 'react';
 import './SpecialNode.css'
 
 import { Handle, Position, NodeProps } from 'react-flow-renderer';
-import { Box, Input, Button,  TextField } from '@mui/material';
+import { Box, Input, IconButton, TextField } from '@mui/material';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
+
 // const handleNodeClick = (event: any) => {
 //   console.log("click")
 // };
@@ -46,12 +51,15 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
 
 
   var expandedTest = <></>
+  var expandIcon = <ExpandMoreOutlinedIcon/>
 
   if( expanded){
     expandedTest =  <Box
       component="form"
       sx={{
-        '& .MuiTextField-root': { marginTop: 2 },
+        '& .MuiTextField-root': { 
+          margin: '2px',
+          marginBottom: '4px', },
       }}
       noValidate
       autoComplete="off"
@@ -67,11 +75,18 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
           multiline
         />
         </div>
-  </Box>
+    </Box>
+    expandIcon = <ExpandLessOutlinedIcon />
   }
 
   return (
-    <div >
+    <Box 
+      sx={{
+        padding: '3px',
+        paddingTop: '0px',
+        paddingBottom: '0px',
+        textAlign: 'center',
+      }}>
       <Handle
         type="target"
         position={Position.Left}
@@ -79,46 +94,48 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
         onConnect={(params) => console.log('handle onConnect', params)}
         isConnectable={isConnectable}
       />
-      <div>
-        <Button 
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          paddingBottom: '0px',
+          paddingTop: '0px',
+        }}>
+        <IconButton 
           onClick={handleNewInputClick}
-          variant="contained"
           sx={{
-            backgroundColor: '#555',
+            padding: 0,
           }}
-        />
-        <Button 
-          onClick={handleNewOutputClick}
-          variant="contained"
-          sx={{
-            backgroundColor: '#555',
-          }}
-        />
-        
+        ><AddBoxOutlinedIcon/></IconButton>
         <Input 
           defaultValue="New Node" 
           disableUnderline={true}
+          fullWidth
           sx = {{
-            fontSize: 12,
-          }}/>
-      </div>
-      <Button
-        variant="contained"
-        color="primary"
+            marginTop: '2px',
+            fontSize: 14,
+            fontWeight: 'bold',
+          }}
+        />
+        <IconButton 
+          onClick={handleNewOutputClick}
+          size = "small"
+          sx={{
+            padding: 0,
+          }}
+        ><AddCircleOutlineOutlinedIcon/></IconButton>
+      </Box>
+      <IconButton
         onClick={handleExpandClick}
         sx = {{
-          fontSize: 8,
           padding: 0,
+          margin: '-5px',
+          marginTop: '-15px',
         }}
         >
-          Expand
-        </Button>
-        <Box 
-          sx={{
-            fontSize: '6px',
-          }}>
+            {expandIcon}
+        </IconButton>
         {expandedTest}
-        </Box>
       <Handle
         type="source"
         position={Position.Right}
@@ -126,7 +143,7 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
         style={{background: '#555' }}
         isConnectable={isConnectable}
       />
-    </div>
+    </Box>
   );
 };
 
