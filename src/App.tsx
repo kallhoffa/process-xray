@@ -1,41 +1,115 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import OverviewFlow from './OverviewFlow';
 import '@fontsource/roboto';
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBsOMyfKC6DoppeF7QlKGcaav3Gk5x58kg",
-  authDomain: "processxray.firebaseapp.com",
-  databaseURL: "https://processxray-default-rtdb.firebaseio.com",
-  projectId: "processxray",
-  storageBucket: "processxray.appspot.com",
-  messagingSenderId: "60985816000",
-  appId: "1:60985816000:web:b9da151b0cb45806eb8e25",
-  measurementId: "G-Y67H80EWV5"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+import { Box, Button } from '@material-ui/core';import Dialog from '@mui/material/Dialog';
+import firebase from './firebase.js'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 function App() {
+
+
+
+  const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'popup',
+    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.signInSuccessUrl: '/signedIn',
+    // We will display Google and Facebook as auth providers.
+    signInOptions: [
+        //firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    ],
+    callbacks: {
+      // Avoid redirects after sign-in.
+      signInSuccessWithAuthResult: () => false,
+    },
+  };
+
+  
+  const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
+
+  // // Listen to the Firebase Auth state and set the local state.
+  useEffect(() => {
+    const unregisterAuthObserver = firebase.auth().onAuthStateChanged((user: any) => {
+      setIsSignedIn(!!user);
+      handleClose();
+    });
+    return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  }, []);
+
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleSignOut = () => {
+    firebase.auth().signOut()
+    setIsSignedIn(false)
+  }
+
+
+  var signInButton = 
+    <Button variant="contained" 
+      onClick={handleOpen}>
+      Sign In
+    </Button>
+
+  var signOutButton = 
+  <Button variant="contained" 
+    onClick={handleSignOut}> 
+    Sign Out
+  </Button>
+
+  var sessionButton = signInButton
+  var userText = <></>
+
+  if (isSignedIn) {
+    sessionButton = signOutButton
+    userText = <>Welcome {firebase.auth().currentUser!.displayName}</>
+  }
+
+  var signInBlock = 
+  <Box  className='signin-button'>
+  <Box sx={{
+    display: 'flex', 
+    flexDirection: 'column', 
+    justifyContent: 'center',
+    marginRight: '5px',
+    }}>
+      {userText}
+    </Box>
+    {sessionButton}
+  <Box sx={{
+    marginRight: '10px',
+  }}>
+    
+  </Box>
+</Box>
+
   return (
-    <div className="App">
+    <Box className="App">
+      
       <header className="App-header">
-        ProcessXray
+        <div className='app-title'>ProcessXray</div>
+        <div>{signInBlock}</div>
+        <Dialog   
+          open={open}
+          onClose={handleClose}
+        >
+          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> 
+        </Dialog>
       </header>
-      <div className="App-content">
+      
+      <Box className="App-content"
+        sx={{
+          display: 'flex',
+          alignContent: 'center',
+          justifyContent: 'center',
+        }}>
+        
         <OverviewFlow />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 

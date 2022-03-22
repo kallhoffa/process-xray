@@ -4964,6 +4964,11 @@
     "address" "^1.0.1"
     "debug" "^2.6.0"
 
+"dialog-polyfill@^0.4.7":
+  "integrity" "sha512-j5yGMkP8T00UFgyO+78OxiN5vC5dzRQF3BEio+LhNvDbyfxWBsi3sfPArDm54VloaJwy2hm3erEiDWqHRC8rzw=="
+  "resolved" "https://registry.npmjs.org/dialog-polyfill/-/dialog-polyfill-0.4.10.tgz"
+  "version" "0.4.10"
+
 "diff-sequences@^26.6.2":
   "integrity" "sha512-Mv/TDa3nZ9sbc5soK+OoA74BsS3mL37yixCvUAQkiuA4Wz6YtwP/K47n2rv2ovzHZvoiQeA5FTQOschKkEwB0Q=="
   "resolved" "https://registry.npmjs.org/diff-sequences/-/diff-sequences-26.6.2.tgz"
@@ -5949,7 +5954,7 @@
     "locate-path" "^5.0.0"
     "path-exists" "^4.0.0"
 
-"firebase@^9.6.9":
+"firebase@^9.1.3", "firebase@^9.6.9":
   "integrity" "sha512-S9OmI+vMLNE8dr8ISyAdF88t8JxSMvbSULFq2Eox0q4P3MUN5N0/68NDIhibXTp6hdLI6/hs7b50SAplTCx9NA=="
   "resolved" "https://registry.npmjs.org/firebase/-/firebase-9.6.9.tgz"
   "version" "9.6.9"
@@ -5980,6 +5985,14 @@
     "@firebase/storage" "0.9.3"
     "@firebase/storage-compat" "0.1.11"
     "@firebase/util" "1.5.0"
+
+"firebaseui@^6.0.0", "firebaseui@^6.0.1":
+  "integrity" "sha512-SMNCFt/xns3mnvd0hImEDu7di5fqRU3MVyIaXpVEfg6v0bH6f3m+YybivU7KElRUT/47DHMn++D8MrZYYnoN5g=="
+  "resolved" "https://registry.npmjs.org/firebaseui/-/firebaseui-6.0.1.tgz"
+  "version" "6.0.1"
+  dependencies:
+    "dialog-polyfill" "^0.4.7"
+    "material-design-lite" "^1.2.0"
 
 "flat-cache@^3.0.4":
   "integrity" "sha512-dm9s5Pw7Jc0GvMYbshN6zchCA9RgQlzzEZX3vylR9IqFfS8XciblUXOKfW6SiuJ0e13eDYZoZV5wdrev7P3Nwg=="
@@ -8176,6 +8189,11 @@
   dependencies:
     "object-visit" "^1.0.0"
 
+"material-design-lite@^1.2.0":
+  "integrity" "sha1-0ATOP+6Zoe63Sni4oyUTSl8RcdM="
+  "resolved" "https://registry.npmjs.org/material-design-lite/-/material-design-lite-1.3.0.tgz"
+  "version" "1.3.0"
+
 "md5.js@^1.3.4":
   "integrity" "sha512-xitP+WxNPcTTOgnTJcrhM0xvdPepipPSf3I8EIpGKeFLjt3PlJLIDG3u8EX53ZIubkb+5U2+3rELYpEhHhzdkg=="
   "resolved" "https://registry.npmjs.org/md5.js/-/md5.js-1.3.5.tgz"
@@ -10217,6 +10235,13 @@
   "resolved" "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.10.tgz"
   "version" "6.0.10"
 
+"react-firebaseui@^6.0.0":
+  "integrity" "sha512-VzLMiW7DBZCsW/qpP9nky/pPlAoIjDxA2Qyc+QAPf+RjelIkvPPiCBXR2aAz+Upy+ujrx6pYDXj547DW5uC4ww=="
+  "resolved" "https://registry.npmjs.org/react-firebaseui/-/react-firebaseui-6.0.0.tgz"
+  "version" "6.0.0"
+  dependencies:
+    "firebaseui" "^6.0.0"
+
 "react-flow-renderer@^9.6.7":
   "integrity" "sha512-GxHBXzkn8Y+TEG8pul7h6Fjo4cKrT0kW9UQ34OAGZqAnSBLbBsx9W++TF8GiULBbTn3O8o7HtHxux685Op10mQ=="
   "resolved" "https://registry.npmjs.org/react-flow-renderer/-/react-flow-renderer-9.7.4.tgz"
@@ -10339,7 +10364,7 @@
     "loose-envify" "^1.4.0"
     "prop-types" "^15.6.2"
 
-"react@*", "react@^16.8.0 || ^17.0.0", "react@^16.8.3 || ^17", "react@^17.0.0", "react@^17.0.2", "react@>= 16", "react@>= 16.3.0", "react@>=16.6.0", "react@>=16.8.0", "react@16 || 17", "react@17.0.2":
+"react@*", "react@^16.8.0 || ^17.0.0", "react@^16.8.3 || ^17", "react@^17.0.0", "react@^17.0.2", "react@>= 16", "react@>= 16.3.0", "react@>=15 <=17", "react@>=16.6.0", "react@>=16.8.0", "react@16 || 17", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"
