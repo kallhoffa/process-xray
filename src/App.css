@@ -29,17 +29,6 @@ html, body, #root, .App{
 
 }
 
-.app-title{
-  grid-column: 2;
-}
-
-.signin-button{
-  grid-column: 3;
-  font-size: 14px;
-  display: flex;
-  justify-content: right;
-  align-content: center;
-}
 
 .ReactFlowWrapper {
   height: auto;

@@ -8,6 +8,7 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // const handleNodeClick = (event: any) => {
 //   console.log("click")
@@ -15,6 +16,7 @@ import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 
 import createNode from '../utils/createNode'
 import createEdge from '../utils/createEdge'
+import deleteNode from '../utils/deleteNode';
 
 const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any) => {
   const [expanded, setExpanded]: any = useState(false);
@@ -49,6 +51,10 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
     createEdge({source: newNodeId, target: id, reactFlowInstance, projectName})
   }
 
+  const handleDeleteClick = ({id, reactFlowInstance}: any) => {
+    deleteNode({id, reactFlowInstance})
+  }
+
 
 
   var expandedTest = <></>
@@ -76,6 +82,13 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
           multiline
         />
         </div>
+        <IconButton
+          size='small'
+          color='error'
+          onClick={() => handleDeleteClick({id, reactFlowInstance})}
+          >
+          <DeleteIcon />
+        </IconButton>
     </Box>
     expandIcon = <ExpandLessOutlinedIcon />
   }

@@ -82,15 +82,23 @@ const SignIn = () => {
     </Box>
 
     return (
-        <>
-        <div>{signInBlock}</div>
-        <Dialog   
-          open={open}
-          onClose={handleClose}
-        >
-          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> 
-        </Dialog>
-        </>
+        <Box
+          sx={{
+            fontSize: '14px',
+            display: 'flex',
+            justifyContent: 'right',
+            alignContent: 'center',
+            gridColumn: '3',
+            padding: '5px',
+          }}>
+          <div>{signInBlock}</div>
+          <Dialog   
+            open={open}
+            onClose={handleClose}
+          >
+            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> 
+          </Dialog>
+        </Box>
     )
 }
 

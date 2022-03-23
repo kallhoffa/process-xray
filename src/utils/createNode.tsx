@@ -1,7 +1,7 @@
 function createNode ({nodeX, nodeY, inPixels, reactFlowInstance}: any): string {
 
     const currentNodes = reactFlowInstance.getNodes()
-    const id = currentNodes.length + 1
+    const id = currentNodes.map((node: { id: any; }) => node.id).sort().pop() + 1
     reactFlowInstance.getNodes()
     var position = {x:0,y:0}
     if(inPixels){
@@ -21,7 +21,7 @@ function createNode ({nodeX, nodeY, inPixels, reactFlowInstance}: any): string {
     const newNode = {
     id: id.toString(),
     type: 'special',
-    data: { label: `Node ${id}`},
+    data: { label: `Node ${id}`, title: 'New Node', description: ''},
     position,
     }
 

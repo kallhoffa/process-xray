@@ -10,7 +10,10 @@ function App() {
     <Box className="App">
       
       <header className="App-header">
-        <div className='app-title'>ProcessXray</div>
+        <Box className='app-title'
+          sx={{fontSize: '36px', fontWeight: 'bold', margin: '0px 0px 0px 0px'}}>
+          ProcessXray
+        </Box>
         <SignIn />
       </header>
       

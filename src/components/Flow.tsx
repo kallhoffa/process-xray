@@ -6,6 +6,7 @@ import ReactFlow, { Node, Edge, addEdge, applyEdgeChanges, applyNodeChanges, Min
 import readElements from '../utils/readElements'
 import storeElements from '../utils/storeElements';
 import CanvasClickPopover from './CanvasClickPopover';
+import ProjectBar from './ProjectBar';
 import SpecialNode from './SpecialNode'
 
 const Flow = () => {
@@ -49,12 +50,6 @@ const Flow = () => {
 
   const nodeTypes = useMemo(() => ({ special: SpecialNode }), []);
   
-  const handleSave = (projectName: any, nodes: any, edges: any) => {
-    console.log(nodes, edges)
-    storeElements(projectName, nodes, edges)
-  }
-  
-
   useEffect( () => {
     readElements(projectName).then((elements) =>{
     setNodes(elements.nodes)
@@ -66,7 +61,7 @@ const Flow = () => {
 
   return (
     <div className="ReactFlowWrapper" ref={reactFlowWrapper}>
-    <Button variant="contained" onClick={() => handleSave(projectName, nodes, edges)}>SAVE</Button>
+    <ProjectBar projectName={projectName} nodes={nodes} edges={edges}/>
     <ReactFlow
       nodes={nodes}
       edges={edges}
