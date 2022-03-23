@@ -1,10 +1,8 @@
-import { Button } from '@material-ui/core';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useCallback, useState } from 'react';
 import ReactFlow, { Node, Edge, addEdge, applyEdgeChanges, applyNodeChanges, MiniMap, Controls, Background } from 'react-flow-renderer';
 
 import readElements from '../utils/readElements'
-import storeElements from '../utils/storeElements';
 import CanvasClickPopover from './CanvasClickPopover';
 import ProjectBar from './ProjectBar';
 import SpecialNode from './SpecialNode'
