@@ -91,6 +91,9 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
           onChange={(event: any) => {
             handleDescriptionUpdate(event)
           }}
+          onTouchEnd={(event: any) => {
+            event.target.focus()
+          }}
           sx={{
             '& .MuiInputLabel-root': {fontSize: '10px'},
             '& .MuiInputBase-root': {fontSize: '10px'},
@@ -102,6 +105,7 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
           size='small'
           color='error'
           onClick={() => handleDeleteClick({id, reactFlowInstance})}
+          onTouchEnd={() => handleDeleteClick({id, reactFlowInstance})}
           >
           <DeleteIcon />
         </IconButton>
@@ -135,6 +139,7 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
         }}>
         <IconButton 
           onClick={() => handleNewInputClick(reactFlowInstance)}
+          onTouchEnd={() => handleNewInputClick(reactFlowInstance)}
           sx={{
             padding: 0,
           }}
@@ -145,6 +150,9 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
           onChange={(event: any) => {
             handleNameUpdate(event)
           }}
+          onTouchEnd={(event: any) => {
+            event.target.focus()
+          }}
           fullWidth
           sx = {{
             marginTop: '2px',
@@ -154,6 +162,7 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
         />
         <IconButton 
           onClick={() => handleNewOutputClick(reactFlowInstance)}
+          onTouchEnd={() => handleNewOutputClick(reactFlowInstance)}
           size = "small"
           sx={{
             padding: 0,
@@ -162,6 +171,7 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
       </Box>
       <IconButton
         onClick={handleExpandClick}
+        onTouchEnd={handleExpandClick}
         sx = {{
           padding: 0,
           margin: '-5px',
