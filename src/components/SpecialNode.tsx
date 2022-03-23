@@ -117,6 +117,7 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
         paddingTop: '0px',
         paddingBottom: '0px',
         textAlign: 'center',
+        cursor: 'pointer',
       }}>
       <Handle
         type="target"
