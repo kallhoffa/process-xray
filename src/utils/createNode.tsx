@@ -21,7 +21,7 @@ function createNode ({nodeX, nodeY, inPixels, reactFlowInstance}: any): string {
     const newNode = {
     id: id.toString(),
     type: 'special',
-    data: { label: `Node ${id}`, title: 'New Node', description: ''},
+    data: { label: `Node ${id}`, name: 'New Node', description: ''},
     position,
     }
 

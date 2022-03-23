@@ -17,6 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import createNode from '../utils/createNode'
 import createEdge from '../utils/createEdge'
 import deleteNode from '../utils/deleteNode';
+import updateNode from '../utils/updateNode';
 
 const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any) => {
   const [expanded, setExpanded]: any = useState(false);
@@ -55,6 +56,17 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
     deleteNode({id, reactFlowInstance})
   }
 
+  const handleNameUpdate = (event: any) => {
+    const newName = event.target.value
+    updateNode({id, data: {...data, name: newName}, reactFlowInstance})
+  }
+
+  const handleDescriptionUpdate = (event: any) => {
+    const newDescription = event.target.value
+    updateNode({id, data: {...data, description: newDescription}, reactFlowInstance})
+  }
+
+
 
 
   var expandedTest = <></>
@@ -75,6 +87,10 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
         <TextField
           id="outlined-multiline-flexible"
           label="Description"
+          defaultValue={data.description}
+          onChange={(event: any) => {
+            handleDescriptionUpdate(event)
+          }}
           sx={{
             '& .MuiInputLabel-root': {fontSize: '10px'},
             '& .MuiInputBase-root': {fontSize: '10px'},
@@ -123,8 +139,11 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
           }}
         ><AddBoxOutlinedIcon/></IconButton>
         <Input 
-          defaultValue="New Node" 
+          defaultValue={data.name}
           disableUnderline={true}
+          onChange={(event: any) => {
+            handleNameUpdate(event)
+          }}
           fullWidth
           sx = {{
             marginTop: '2px',
