@@ -2,7 +2,7 @@ import React, { memo , FC, useState} from 'react';
 
 import './SpecialNode.css'
 
-import { Handle, Position, NodeProps } from 'react-flow-renderer';
+import { Handle, Position, NodeProps, useReactFlow } from 'react-flow-renderer';
 import { Box, Input, IconButton, TextField } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
@@ -13,39 +13,38 @@ import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 //   console.log("click")
 // };
 
-import CreateNode from './CreateNode'
-import CreateEdge from './CreateEdge'
+import createNode from '../utils/createNode'
+import createEdge from '../utils/createEdge'
 
 const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any) => {
   const [expanded, setExpanded]: any = useState(false);
 
-  const elementsObject = data.elementsObject;
+  const reactFlowInstance = useReactFlow()
 
-
-  const handleExpandClick = (event: any) => {
+  const handleExpandClick = () => {
     setExpanded(!expanded)
   }
 
-  const handleNewOutputClick = (event: any) => {
+  const handleNewOutputClick = (reactFlowInstance: any) => {
 
     const nodeX = xPos + 200;
     const nodeY = yPos;
 
     console.log(xPos, yPos)
 
-    const newNodeId: string = CreateNode({nodeX, nodeY, inPixels:false, elementsObject})
-    CreateEdge({source: id, target: newNodeId, elementsObject})
+    const newNodeId: string = createNode({nodeX, nodeY, inPixels: false, reactFlowInstance})
+    createEdge({source: id, target: newNodeId, reactFlowInstance})
   }
 
-  const handleNewInputClick = (event: any) => {
+  const handleNewInputClick = (reactFlowInstance: any) => {
 
     const nodeX = xPos - 200;
     const nodeY = yPos;
 
     console.log(xPos, yPos)
 
-    const newNodeId: string = CreateNode({nodeX, nodeY, inPixels:false, elementsObject})
-    CreateEdge({source: newNodeId, target: id, elementsObject})
+    const newNodeId: string = createNode({nodeX, nodeY, inPixels: false, reactFlowInstance})
+    createEdge({source: newNodeId, target: id, reactFlowInstance})
   }
 
 
@@ -80,6 +79,7 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
   }
 
   return (
+    
     <Box 
       sx={{
         padding: '3px',
@@ -102,7 +102,7 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
           paddingTop: '0px',
         }}>
         <IconButton 
-          onClick={handleNewInputClick}
+          onClick={() => handleNewInputClick(reactFlowInstance)}
           sx={{
             padding: 0,
           }}
@@ -118,7 +118,7 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
           }}
         />
         <IconButton 
-          onClick={handleNewOutputClick}
+          onClick={() => handleNewOutputClick(reactFlowInstance)}
           size = "small"
           sx={{
             padding: 0,

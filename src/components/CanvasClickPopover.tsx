@@ -1,13 +1,14 @@
 import React from 'react';
 
-import CreateNode from './CreateNode'
+import createNode from '../utils/createNode'
+import {useReactFlow} from "react-flow-renderer"
 
 import { makeStyles } from '@material-ui/core/styles';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-const CanvasClickPopover = ({anchorEl, handleClose, elementsObject}: any) => {
+const CanvasClickPopover = ({anchorEl, handleClose, reactFlowWrapper}: any) => {
 
 
   // POPOVER TESTING---------------------------
@@ -29,15 +30,15 @@ const CanvasClickPopover = ({anchorEl, handleClose, elementsObject}: any) => {
   const id = anchorEl.open ? 'simple-popover' : undefined;
   // POPOVER TESTING---------------------------
 
-  
+  const reactFlowInstance = useReactFlow()
 
-  const handlePopoverClick = (event: any) => {
-    
-    const reactFlowBounds = elementsObject.reactFlowWrapper.current.getBoundingClientRect();
+  const handlePopoverClick = (anchorEl: any, reactFlowWrapper: any, reactFlowInstance: any) => {
+
+    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
     const nodeX = anchorEl.x - reactFlowBounds.left - 150
-    const nodeY = anchorEl.y - reactFlowBounds.top-25
+    const nodeY = anchorEl.y - reactFlowBounds.top - 25
 
-    CreateNode({nodeX, nodeY, inPixels: true,  elementsObject})
+    createNode({nodeX, nodeY, inPixels: true, reactFlowInstance})
 
     handleClose()
   }
@@ -64,7 +65,7 @@ const CanvasClickPopover = ({anchorEl, handleClose, elementsObject}: any) => {
         }}
       >
         <Button
-          onClick={handlePopoverClick}
+          onClick={() => handlePopoverClick(anchorEl, reactFlowWrapper, reactFlowInstance)}
           variant="contained"
           color="primary"
           className={classes.button}
