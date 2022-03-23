@@ -8,7 +8,7 @@ import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-const CanvasClickPopover = ({anchorEl, handleClose, reactFlowWrapper}: any) => {
+const CanvasClickPopover = ({anchorEl, handleClose, reactFlowWrapper, projectName}: any) => {
 
 
   // POPOVER TESTING---------------------------
@@ -38,7 +38,7 @@ const CanvasClickPopover = ({anchorEl, handleClose, reactFlowWrapper}: any) => {
     const nodeX = anchorEl.x - reactFlowBounds.left - 150
     const nodeY = anchorEl.y - reactFlowBounds.top - 25
 
-    createNode({nodeX, nodeY, inPixels: true, reactFlowInstance})
+    createNode({nodeX, nodeY, inPixels: true, reactFlowInstance, edge: false, projectName})
 
     handleClose()
   }

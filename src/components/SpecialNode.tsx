@@ -21,6 +21,8 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
 
   const reactFlowInstance = useReactFlow()
 
+  const {projectName} = data
+
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
@@ -32,8 +34,8 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
 
     console.log(xPos, yPos)
 
-    const newNodeId: string = createNode({nodeX, nodeY, inPixels: false, reactFlowInstance})
-    createEdge({source: id, target: newNodeId, reactFlowInstance})
+    const newNodeId: string = createNode({nodeX, nodeY, inPixels: false, reactFlowInstance, projectName})
+    createEdge({source: id, target: newNodeId, reactFlowInstance, projectName})
   }
 
   const handleNewInputClick = (reactFlowInstance: any) => {
@@ -43,8 +45,8 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
 
     console.log(xPos, yPos)
 
-    const newNodeId: string = createNode({nodeX, nodeY, inPixels: false, reactFlowInstance})
-    createEdge({source: newNodeId, target: id, reactFlowInstance})
+    const newNodeId: string = createNode({nodeX, nodeY, inPixels: false, reactFlowInstance, projectName})
+    createEdge({source: newNodeId, target: id, reactFlowInstance, projectName})
   }
 
 

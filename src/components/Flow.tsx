@@ -1,8 +1,10 @@
+import { Button } from '@material-ui/core';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useCallback, useState } from 'react';
 import ReactFlow, { Node, Edge, addEdge, applyEdgeChanges, applyNodeChanges, MiniMap, Controls, Background } from 'react-flow-renderer';
-import storeElements from '../utils/storeElements';
+
 import readElements from '../utils/readElements'
+import storeElements from '../utils/storeElements';
 import CanvasClickPopover from './CanvasClickPopover';
 import SpecialNode from './SpecialNode'
 
@@ -46,17 +48,25 @@ const Flow = () => {
   );
 
   const nodeTypes = useMemo(() => ({ special: SpecialNode }), []);
+  
+  const handleSave = (projectName: any, nodes: any, edges: any) => {
+    console.log(nodes, edges)
+    storeElements(projectName, nodes, edges)
+  }
+  
 
-  // storeElements(projectName, nodes, edges)
+  useEffect( () => {
+    readElements(projectName).then((elements) =>{
+    setNodes(elements.nodes)
+    setEdges(elements.edges)
+    })
+  }, [])
 
-  // readElements(projectName).then((elements) =>{
-  //   setNodes(elements.nodes)
-  //   setEdges(elements.edges)
-  // })
 
 
   return (
     <div className="ReactFlowWrapper" ref={reactFlowWrapper}>
+    <Button variant="contained" onClick={() => handleSave(projectName, nodes, edges)}>SAVE</Button>
     <ReactFlow
       nodes={nodes}
       edges={edges}
@@ -89,8 +99,7 @@ const Flow = () => {
       />
       <Controls />
       <Background color="#aaa" gap={16} />
-      <CanvasClickPopover handleClose={handleCanvasPopoverClose} anchorEl={anchorEl} reactFlowWrapper={reactFlowWrapper}/> 
-      
+      <CanvasClickPopover handleClose={handleCanvasPopoverClose} anchorEl={anchorEl} reactFlowWrapper={reactFlowWrapper} projectName={projectName}/> 
     </ReactFlow>
     </div>
   );
