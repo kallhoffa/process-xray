@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import ReactFlow, { Node, Edge, addEdge, applyEdgeChanges, applyNodeChanges, MiniMap, Controls, Background } from 'react-flow-renderer';
 
 import readElements from '../utils/readElements'
+import readProjects from '../utils/readProjects'
 import CanvasClickPopover from './CanvasClickPopover';
 import ProjectBar from './ProjectBar';
 import SpecialNode from './SpecialNode'
@@ -23,8 +24,9 @@ const Flow = () => {
   };
   // POPOVER Code---------------------------
 
-  
-  const projectName = 'test'
+  const [projectName, setProjectName] = useState('');
+  const [loadedProjectName, setLoadedProjectName] = useState('');
+  const [projectList, setProjectList] = useState([]);
 
   var initialNodes: Node[] = [];
   var initialEdges: Edge[] = [];
@@ -49,17 +51,43 @@ const Flow = () => {
   const nodeTypes = useMemo(() => ({ special: SpecialNode }), []);
   
   useEffect( () => {
-    readElements(projectName).then((elements) =>{
-    setNodes(elements.nodes)
-    setEdges(elements.edges)
-    })
-  }, [])
+    if(!loadedProjectName){
+      readProjects().then( (projects) => {
+        setProjectList(projects);
+        setProjectName(projects[0]);
+        setLoadedProjectName(projects[0]);
+
+        readElements(projects[0]).then((elements) =>{
+          setNodes(elements.nodes)
+          setEdges(elements.edges)
+          })
+      });
+   } else {
+     console.log(loadedProjectName)
+      readElements(loadedProjectName).then((elements) =>{
+        setNodes([])
+        setNodes(elements.nodes)
+        setEdges([])
+        setEdges(elements.edges)
+        })
+    }
+    
+  }, [loadedProjectName])
 
 
 
   return (
     <div className="ReactFlowWrapper" ref={reactFlowWrapper}>
-    <ProjectBar projectName={projectName} nodes={nodes} edges={edges}/>
+    <ProjectBar 
+      projectName={projectName} 
+      setProjectName={setProjectName} 
+      loadedProjectName={loadedProjectName} 
+      setLoadedProjectName={setLoadedProjectName} 
+      projectList={projectList} 
+      setProjectList={setProjectList}
+      nodes={nodes} 
+      edges={edges}
+    />
     <ReactFlow
       nodes={nodes}
       edges={edges}

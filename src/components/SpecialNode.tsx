@@ -19,7 +19,7 @@ import createEdge from '../utils/createEdge'
 import deleteNode from '../utils/deleteNode';
 import updateNode from '../utils/updateNode';
 
-const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any) => {
+const SpecialNode : FC<NodeProps> = ({ data, selected, id, xPos, yPos, isConnectable}: any) => {
   const [expanded, setExpanded]: any = useState(false);
 
   const reactFlowInstance = useReactFlow()
@@ -140,8 +140,10 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
         <IconButton 
           onClick={() => handleNewInputClick(reactFlowInstance)}
           onTouchEnd={() => handleNewInputClick(reactFlowInstance)}
+          disabled={!selected}
           sx={{
             padding: 0,
+            visibility: selected ? 'visible' : 'hidden',
           }}
         ><AddBoxOutlinedIcon/></IconButton>
         <Input 
@@ -163,9 +165,11 @@ const SpecialNode : FC<NodeProps> = ({ data, id, xPos, yPos, isConnectable}: any
         <IconButton 
           onClick={() => handleNewOutputClick(reactFlowInstance)}
           onTouchEnd={() => handleNewOutputClick(reactFlowInstance)}
+          disabled={!selected}
           size = "small"
           sx={{
             padding: 0,
+            visibility: selected ? 'visible' : 'hidden',
           }}
         ><AddCircleOutlineOutlinedIcon/></IconButton>
       </Box>
