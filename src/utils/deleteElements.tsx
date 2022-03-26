@@ -1,9 +1,9 @@
 import {doc, deleteDoc} from "firebase/firestore";
 import { db } from "../firebase";
 
-async function deleteElements(projectName: any){
+async function deleteElements(project: any){
 
-    await deleteDoc(doc(db, "projects", projectName))
+    await deleteDoc(doc(db, "projects", project.id))
 
     return true
 }

@@ -1,6 +1,16 @@
+import firebase from '../firebase.js'
 import React, { useEffect, useMemo, useRef } from 'react';
-import { useCallback, useState } from 'react';
-import ReactFlow, { Node, Edge, addEdge, applyEdgeChanges, applyNodeChanges, MiniMap, Controls, Background } from 'react-flow-renderer';
+import { useCallback } from 'react';
+import ReactFlow, 
+  { addEdge, 
+    applyEdgeChanges, 
+    applyNodeChanges, 
+    //MiniMap, 
+    Controls, 
+    Background } 
+    from 'react-flow-renderer';
+import { useRecoilState,  useSetRecoilState } from 'recoil';
+import { activeProjectState, edgesState, nodesState, projectListState, desiredProjectNameState} from '../store';
 
 import readElements from '../utils/readElements'
 import readProjects from '../utils/readProjects'
@@ -8,7 +18,9 @@ import CanvasClickPopover from './CanvasClickPopover';
 import ProjectBar from './ProjectBar';
 import SpecialNode from './SpecialNode'
 
-const Flow = () => {
+const Flow = (props: any) => {
+
+  const {user} = props
 
   // POPOVER Code---------------------------
   const popoverXOffset = 2;
@@ -24,16 +36,12 @@ const Flow = () => {
   };
   // POPOVER Code---------------------------
 
-  const [projectName, setProjectName] = useState('');
-  const [loadedProjectName, setLoadedProjectName] = useState('');
-  const [projectList, setProjectList] = useState([]);
-
-  var initialNodes: Node[] = [];
-  var initialEdges: Edge[] = [];
-
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+  const [activeProject, setActiveProject] = useRecoilState(activeProjectState);
+  const setDesiredProjectName = useSetRecoilState(desiredProjectNameState)
+  const setProjectList= useSetRecoilState(projectListState)
+  const [nodes, setNodes] = useRecoilState(nodesState);
+  const [edges, setEdges] = useRecoilState(edgesState);
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -49,45 +57,38 @@ const Flow = () => {
   );
 
   const nodeTypes = useMemo(() => ({ special: SpecialNode }), []);
+
+
   
   useEffect( () => {
-    if(!loadedProjectName){
-      readProjects().then( (projects) => {
-        setProjectList(projects);
-        setProjectName(projects[0]);
-        setLoadedProjectName(projects[0]);
-
-        readElements(projects[0]).then((elements) =>{
-          setNodes(elements.nodes)
-          setEdges(elements.edges)
-          })
-      });
-   } else {
-     console.log(loadedProjectName)
-      readElements(loadedProjectName).then((elements) =>{
+    if(firebase.auth().currentUser){
+      if(!activeProject.name){
+        readProjects().then( (projects) => {
+          if(projects.length > 0){
+            setProjectList(projects);
+            setDesiredProjectName(projects[0].name);
+            setActiveProject(projects[0]);
+          }
+        });
+      } 
+      else {
         setNodes([])
-        setNodes(elements.nodes)
         setEdges([])
-        setEdges(elements.edges)
-        })
-    }
-    
-  }, [loadedProjectName])
+        if(!activeProject.new){
+          readElements(activeProject.id).then((elements) =>{
+            setNodes(elements.nodes)
+            setEdges(elements.edges)
+          })
+        }
+      }
+    } 
+  }, [activeProject, user, setProjectList, setDesiredProjectName, setActiveProject, setNodes, setEdges])
 
 
 
   return (
     <div className="ReactFlowWrapper" ref={reactFlowWrapper}>
-    <ProjectBar 
-      projectName={projectName} 
-      setProjectName={setProjectName} 
-      loadedProjectName={loadedProjectName} 
-      setLoadedProjectName={setLoadedProjectName} 
-      projectList={projectList} 
-      setProjectList={setProjectList}
-      nodes={nodes} 
-      edges={edges}
-    />
+    <ProjectBar />
     <ReactFlow
       nodes={nodes}
       edges={edges}
@@ -102,7 +103,7 @@ const Flow = () => {
       nodeTypes={nodeTypes}
     >
         
-      <MiniMap
+      {/* <MiniMap
         nodeStrokeColor={(n:any) => {
           if (n.style?.background) return n.style.background;
           if (n.type === 'input') return '#0041d0';
@@ -117,10 +118,10 @@ const Flow = () => {
           return '#fff';
         }}
         nodeBorderRadius={2}
-      />
+      /> */}
       <Controls />
       <Background color="#aaa" gap={16} />
-      <CanvasClickPopover handleClose={handleCanvasPopoverClose} anchorEl={anchorEl} reactFlowWrapper={reactFlowWrapper} projectName={projectName}/> 
+      <CanvasClickPopover handleClose={handleCanvasPopoverClose} anchorEl={anchorEl} reactFlowWrapper={reactFlowWrapper} /> 
     </ReactFlow>
     </div>
   );

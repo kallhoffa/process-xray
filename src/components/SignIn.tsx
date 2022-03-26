@@ -1,9 +1,19 @@
 import { Box, Button, Dialog } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { useSetRecoilState } from 'recoil';
 import firebase from '../firebase.js'
+import { activeProjectState, desiredProjectNameState, edgesState, nodesState, projectListState } from '../store';
 
-const SignIn = () => {
+const SignIn = (props: any) => {
+
+    const {setUser} = props
+
+    const setActiveProject = useSetRecoilState(activeProjectState);
+    const setDesiredProjectName = useSetRecoilState(desiredProjectNameState)
+    const setProjectList= useSetRecoilState(projectListState)
+    const setNodes = useSetRecoilState(nodesState);
+    const setEdges= useSetRecoilState(edgesState);
 
     const uiConfig = {
         // Popup signin flow rather than redirect flow.
@@ -11,7 +21,7 @@ const SignIn = () => {
         // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.signInSuccessUrl: '/signedIn',
         // We will display Google and Facebook as auth providers.
         signInOptions: [
-            //firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
             firebase.auth.EmailAuthProvider.PROVIDER_ID,
         ],
         callbacks: {
@@ -27,10 +37,11 @@ const SignIn = () => {
       useEffect(() => {
         const unregisterAuthObserver = firebase.auth().onAuthStateChanged((user: any) => {
           setIsSignedIn(!!user);
+          setUser(user)
           handleClose();
         });
         return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
-      }, []);
+      }, [setUser]);
     
     
       const [open, setOpen] = useState(false);
@@ -39,6 +50,11 @@ const SignIn = () => {
     
       const handleSignOut = () => {
         firebase.auth().signOut()
+        setNodes([])
+        setEdges([])
+        setActiveProject({id: "", name: "", new: false})
+        setDesiredProjectName("New Project")
+        setProjectList([])
         setIsSignedIn(false)
       }
     

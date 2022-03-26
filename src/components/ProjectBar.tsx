@@ -1,47 +1,34 @@
 import { Alert, Box, Button, Collapse, IconButton, Input, Menu, MenuItem } from '@mui/material'
-import { FC, useState } from "react"
-import storeElements from "../utils/storeElements"
-import deleteElements from '../utils/deleteElements'
+import { useEffect, useState } from "react"
+import saveProject from "../utils/saveProject"
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-
-interface ProjectBarProps {
-    projectName: string,
-    setProjectName: Function,
-    loadedProjectName: string,
-    setLoadedProjectName: Function,
-    projectList: any,
-    setProjectList: Function,
-    nodes: any,
-    edges: any
-}
+import { useRecoilState, useRecoilValue, } from 'recoil';
+import { activeProjectState, edgesState, nodesState, projectListState, desiredProjectNameState } from '../store';
   
 
 
-const ProjectBar: FC<ProjectBarProps> = (props): JSX.Element => {
+const ProjectBar = (): JSX.Element => {
 
-    const { projectName, setProjectName, loadedProjectName,  setLoadedProjectName, projectList, setProjectList, nodes, edges } = props
+    const [desiredProjectName, setDesiredProjectName] = useRecoilState(desiredProjectNameState);
 
-    const [isNewProject, setIsNewProject] = useState(false)
+    const [activeProject, setActiveProject] = useRecoilState(activeProjectState);
+    const [projectList, setProjectList] = useRecoilState(projectListState)
+    const nodes = useRecoilValue(nodesState);
+    const edges  = useRecoilValue(edgesState);
 
-    const handleSave = (projectName: any, nodes: any, edges: any) => {
-        if(projectName !== "New Project" && projectName !== ""){
-            if(!isNewProject){
-                deleteElements(loadedProjectName)
-                storeElements(projectName, nodes, edges)
-                setProjectList(projectList.filter( (project: any) => project !== loadedProjectName).concat(projectName))
-                
-                setIsNewProject(false)
-                setLoadedProjectName(projectName)
-                setSaveAlertOpen(false)
-            } else{
-                storeElements(projectName, nodes, edges)
-                setProjectList(projectList.concat(projectName))
-                setIsNewProject(false)
-                setLoadedProjectName(projectName)
-                setSaveAlertOpen(false)
-            }
+    useEffect(() => {
+        setDesiredProjectName(activeProject.name) 
+    }, [activeProject, setDesiredProjectName])
+
+    const handleSave = async () => {
+        if(desiredProjectName !== "New Project" && desiredProjectName !== ""){
+            const projectId = await saveProject(activeProject.id, desiredProjectName, nodes, edges)
+            setProjectList(projectList.filter(project => project.id !== activeProject.id).concat({name: desiredProjectName, id: projectId, new: false}))
+            
+            setActiveProject({id: projectId!, name: desiredProjectName, new: false})
+            setSaveAlertOpen(false)
         } else {
             setSaveAlertOpen(true)
         }
@@ -50,7 +37,7 @@ const ProjectBar: FC<ProjectBarProps> = (props): JSX.Element => {
     const handleNameUpdate = (event: any) => {
         const newName = event.target.value
         //theres a race condition here btw
-        setProjectName(newName)
+        setDesiredProjectName(newName)
     }
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -62,16 +49,26 @@ const ProjectBar: FC<ProjectBarProps> = (props): JSX.Element => {
     const handleClose = () => {
         setAnchorEl(null);
     }
-    const handleProjectSelect = (projectName: any) => {
-        console.log(projectName, loadedProjectName)
-        setLoadedProjectName(projectName)
-        setProjectName(projectName)
-        setIsNewProject(projectName === "New Project")
+
+    const newProjectObj = {
+        id: "",
+        name: "New Project",
+        owners: [],
+        editors: [],
+        viewers: [],
+        edges: [],
+        nodes: []
+    }
+
+    const handleProjectSelect = (project: any) => {
+        setActiveProject({...project, new: project.name === "New Project"})
+        setDesiredProjectName("New Project")
         handleClose()
     };
 
-    const projectMenu = projectList.map((projectName: any) => {
-        return <MenuItem onClick={() => handleProjectSelect(projectName)}>{projectName}</MenuItem>
+    const projectMenu = projectList.map((project: any) => {
+
+        return  <MenuItem key={project.id} onClick={() => handleProjectSelect(project)}>{project.name}</MenuItem>
     })
 
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
@@ -143,7 +140,7 @@ const ProjectBar: FC<ProjectBarProps> = (props): JSX.Element => {
                 }}
             >
                 {projectMenu}
-                <MenuItem onClick={() => handleProjectSelect('New Project')}><AddIcon/>New Project</MenuItem>
+                <MenuItem onClick={() => handleProjectSelect(newProjectObj)}><AddIcon/>New Project</MenuItem>
             </Menu>
             <Box
                 sx={{
@@ -153,7 +150,7 @@ const ProjectBar: FC<ProjectBarProps> = (props): JSX.Element => {
                     gridColumn: "3",
                 }}>
                 <Input 
-                    value={projectName}
+                    value={desiredProjectName}
                     disableUnderline={true}
                     onChange={(event: any) => {
                         handleNameUpdate(event)
@@ -172,7 +169,7 @@ const ProjectBar: FC<ProjectBarProps> = (props): JSX.Element => {
             </Box>
             <Button 
                 variant="contained" 
-                onClick={() => handleSave(projectName, nodes, edges)}>
+                onClick={() => handleSave()}>
                     SAVE
             </Button>
             {saveAlert}

@@ -2,8 +2,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 
-async function readElements (projectName: string){
-    const docRef = doc(db, "projects", projectName);
+async function readElements (projectId: string){
+    const docRef = doc(db, "projects", projectId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
         return( docSnap.data())
