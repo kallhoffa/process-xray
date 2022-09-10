@@ -63,7 +63,6 @@ const Flow = (props: any) => {
 
   
   useEffect( () => {
-    if(firebase.auth().currentUser){
       if(!activeProject.name){
         readProjects().then( (projects) => {
           if(projects.length > 0){
@@ -83,7 +82,6 @@ const Flow = (props: any) => {
           })
         }
       }
-    } 
   }, [activeProject, user, setProjectList, setDesiredProjectName, setActiveProject, setNodes, setEdges])
 
 

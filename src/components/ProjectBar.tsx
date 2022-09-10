@@ -4,8 +4,10 @@ import saveProject from "../utils/saveProject"
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
+import firebase from '../firebase.js'
 import { useRecoilState, useRecoilValue, } from 'recoil';
 import { activeProjectState, edgesState, nodesState, projectListState, desiredProjectNameState } from '../store';
+import SaveAlert from './SaveAlert'
   
 
 
@@ -23,14 +25,19 @@ const ProjectBar = (): JSX.Element => {
     }, [activeProject, setDesiredProjectName])
 
     const handleSave = async () => {
-        if(desiredProjectName !== "New Project" && desiredProjectName !== ""){
-            const projectId = await saveProject(activeProject.id, desiredProjectName, nodes, edges)
-            setProjectList(projectList.filter(project => project.id !== activeProject.id).concat({name: desiredProjectName, id: projectId, new: false}))
-            
-            setActiveProject({id: projectId!, name: desiredProjectName, new: false})
-            setSaveAlertOpen(false)
-        } else {
-            setSaveAlertOpen(true)
+        if(firebase.auth().currentUser){
+            if(desiredProjectName !== "New Project" && desiredProjectName !== ""){
+                const projectId = await saveProject(activeProject.id, desiredProjectName, nodes, edges)
+                setProjectList(projectList.filter(project => project.id !== activeProject.id).concat({name: desiredProjectName, id: projectId, new: false}))
+                
+                setActiveProject({id: projectId!, name: desiredProjectName, new: false})
+                setSaveNameAlertOpen(false)
+            } else {
+                setSaveNameAlertOpen(true)
+            }
+        }
+        else{
+            setSaveLoginAlertOpen(true)
         }
       }
     
@@ -71,39 +78,9 @@ const ProjectBar = (): JSX.Element => {
         return  <MenuItem key={project.id} onClick={() => handleProjectSelect(project)}>{project.name}</MenuItem>
     })
 
-    const [saveAlertOpen, setSaveAlertOpen] = useState(false);
-
-    const saveAlert = 
-    <Box sx={{
-        gridColumn: '5',
-        marginLeft: '10px',
-        display: 'flex', 
-        flexDirection: 'column', 
-        justifyContent: 'center',
-    }}>
-        <Collapse in={saveAlertOpen}>
-        <Alert
-            severity="error"
-            action={
-            <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => {
-                setSaveAlertOpen(false);
-                }}
-            >
-                <CloseIcon fontSize="inherit" />
-            </IconButton>
-            }
-            sx={{}}
-        >
-            Project name not valid
-        </Alert>
-        </Collapse>
-    </Box>
-
-        
+    const [saveNameAlertOpen, setSaveNameAlertOpen] = useState(false);
+    
+    const [saveLoginAlertOpen, setSaveLoginAlertOpen] = useState(false);
 
     return (
         <Box
@@ -174,7 +151,17 @@ const ProjectBar = (): JSX.Element => {
                 onClick={() => handleSave()}>
                     SAVE
             </Button>
-            {saveAlert}
+            
+            <Box sx={{
+                gridColumn: '5',
+                marginLeft: '10px',
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'center',
+            }}>
+                <SaveAlert text='Project name not valid' stateVar={saveNameAlertOpen} stateSet={setSaveNameAlertOpen} />
+                <SaveAlert text='Please log in to save your project' stateVar={saveLoginAlertOpen} stateSet={setSaveLoginAlertOpen} />
+            </Box>
         </Box>
     )
 }
