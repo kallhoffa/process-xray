@@ -110,6 +110,8 @@ const ProjectBar = (): JSX.Element => {
             sx={{
                 display: "grid",
                 gridTemplateColumns: "1fr 20px 500px 100px 1fr",
+                gridRow: '1',
+                height: '100%',
                 justifyContent: "center",
                 alignItems: "center",
                 width: "100%",

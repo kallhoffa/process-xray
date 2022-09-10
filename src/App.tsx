@@ -25,6 +25,7 @@ function App() {
         <Box className="App-content"
           sx={{
             display: 'flex',
+            height: '100%',
             alignContent: 'center',
             justifyContent: 'center',
           }}>
