@@ -41,7 +41,7 @@ const Flow = (props: any) => {
   const reactFlowWrapper = useRef(null);
   const [activeProject, setActiveProject] = useRecoilState(activeProjectState);
   const setDesiredProjectName = useSetRecoilState(desiredProjectNameState)
-  const setProjectList= useSetRecoilState(projectListState)
+  const [projectList, setProjectList] = useRecoilState(projectListState)
   const [nodes, setNodes] = useRecoilState(nodesState);
   const [edges, setEdges] = useRecoilState(edgesState);
 
@@ -60,31 +60,31 @@ const Flow = (props: any) => {
 
   const nodeTypes = useMemo(() => ({ special: SpecialNode }), []);
 
-
+  const _ = require('lodash')
   
   useEffect( () => {
-      if(!activeProject.name){
-        readProjects().then( (projects) => {
-          if(projects.length > 0){
-            setProjectList(projects);
-            setDesiredProjectName(projects[0].name);
-            setActiveProject(projects[0]);
-          }
-        });
-      } 
-      else {
-        setNodes([])
-        setEdges([])
-        if(!activeProject.new){
-          readElements(activeProject.id).then((elements) =>{
-            setNodes(elements.nodes)
-            setEdges(elements.edges)
-          })
-        }
+    readProjects().then( (projects) => {
+      if(projects.length > 0 && !+_.isEqual(projectList,projects)){
+        console.log('diiferent?')
+        setProjectList(projects);
+        setDesiredProjectName(projects[0].name);
+        setActiveProject(projects[0]);
       }
-  }, [activeProject, user, setProjectList, setDesiredProjectName, setActiveProject, setNodes, setEdges])
+      })
+      
+  }, [ user, setProjectList, setDesiredProjectName, setActiveProject, setNodes, setEdges])
 
+useEffect( () => {
+  readElements(activeProject.id).then((elements) =>{
+    setNodes(elements.nodes)
+    setEdges(elements.edges)
+    })
 
+    if(activeProject.new){
+    setNodes([])
+    setEdges([])
+    }
+}, [activeProject])
 
   return (
     <Box sx={{

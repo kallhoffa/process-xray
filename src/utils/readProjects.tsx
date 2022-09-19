@@ -7,6 +7,7 @@ async function readProjects (){
     
     const projRef = collection(db, "projects");
 
+    //if not signed in, youll only see one project viewable by everyone
     const userUID  = firebase.auth().currentUser ? firebase.auth().currentUser!.uid : 'guest'
     const projOwnerQuery = query(projRef, where("owners", "array-contains", userUID));
     const projEditorQuery = query(projRef, where('editors', 'array-contains', userUID));
@@ -24,7 +25,6 @@ async function readProjects (){
         projectList.push({name: project.data().name, id: project.id})
     })
 
-    console.log(projectList)
     return projectList;
 
 }
