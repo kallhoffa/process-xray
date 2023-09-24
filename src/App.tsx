@@ -20,6 +20,9 @@ function App() {
             ProcessXray
           </Box>
           <SignIn setUser={setUser}/>
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4469661733057646"
+             crossorigin="anonymous">
+          </script>
         </header>
         
         <Box className="App-content"
